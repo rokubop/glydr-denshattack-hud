@@ -78,7 +78,7 @@ POLL_MS = 8
 # F-key -> (keys it outputs, pedal sections it lights up)
 # Matches the Glydr configurator grid. Full table in the README.
 PEDAL_MAP = {
-    "f2":  (["r"],             ["left_flap", "left_heel", "right_toe"]),
+    "f2":  (["q"],             ["left_flap", "left_heel", "right_toe"]),
     "f3":  (["escape"],        ["left_flap", "left_toe", "right_heel"]),
     "f4":  (["e"],             ["left_flap", "left_toe", "right_toe"]),
     "f5":  (["space"],         ["left_flap"]),
