@@ -162,3 +162,6 @@ Not to F11 or F12 though, see above.
 
 Wayland blocks global key capture entirely. Use an X11 session.
 Compositor policy, nothing the script can do.
+
+## More packages
+Check out my Talon packages for UI, mouse control, input mapping, parrot, and more at [talon-hub-roku](https://github.com/rokubop/talon-hub-roku).

@@ -25,6 +25,7 @@ Feature support is not identical everywhere -- see PLATFORM NOTES at the
 bottom of this file. The HUD itself draws the same on all three.
 """
 
+import signal
 import sys
 import tkinter as tk
 
@@ -685,19 +686,39 @@ def main():
 
     lit = set()      # tile/pedal ids currently highlighted
     emitted = set()  # output keys currently held down
+    closed = False
+    stopping = False
 
     def shutdown():
-        if emitter:
-            for k in emitted:
-                emitter.send(k, False)
-        watcher.stop()
-        win.destroy()
+        # Teardown swallows everything, including a second Ctrl+C landing
+        # mid-call. Releasing held keys matters more than a clean stack.
+        nonlocal closed
+        if closed:
+            return
+        closed = True
+        for release in [lambda k=k: emitter.send(k, False)
+                        for k in (emitted if emitter else ())]:
+            try:
+                release()
+            except BaseException:
+                pass
+        for step in (watcher.stop, win.destroy):
+            try:
+                step()
+            except BaseException:
+                pass
+
+    def on_sigint(signum, frame):
+        # Just raise a flag. Tearing down Tk from inside a signal handler is
+        # what produced the "during handling" traceback on Ctrl+C.
+        nonlocal stopping
+        stopping = True
 
     def tick():
         nonlocal lit, emitted
 
         down = watcher.pressed()
-        if {"ctrl", "shift", "q"} <= down:
+        if stopping or {"ctrl", "shift", "q"} <= down:
             shutdown()
             return
 
@@ -737,11 +758,13 @@ def main():
         print("Note: click-through is Windows-only. The panel will catch "
               "mouse clicks on this platform -- keep it out of the way.")
 
+    signal.signal(signal.SIGINT, on_sigint)
     win.after(POLL_MS, tick)
     try:
         win.mainloop()
     except KeyboardInterrupt:
-        shutdown()
+        pass
+    shutdown()
 
 
 if __name__ == "__main__":

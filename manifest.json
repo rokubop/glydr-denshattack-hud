@@ -1,0 +1,18 @@
+{
+  "name": "glydr-denshattack-hud",
+  "title": "Glydr Denshattack HUD",
+  "description": "Glydr foot pedal HUD + F key remap for Denshattack. Standalone Python, no Talon required. Transparent overlay lights up the pedal section you pressed and sends the mapped key to the game.",
+  "version": "0.1.0",
+  "status": "experimental",
+  "github": "https://github.com/rokubop/glydr-denshattack-hud",
+  "preview": "https://raw.githubusercontent.com/rokubop/glydr-denshattack-hud/main/preview.png",
+  "author": "Rokubop",
+  "tags": ["glydr", "foot-pedal", "hud", "gaming", "standalone"],
+  "platforms": ["windows", "mac", "linux"],
+  "dependencies": {},
+  "pipDependencies": {
+    "pynput": {
+      "version": "*"
+    }
+  }
+}
